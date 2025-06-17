@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { FileText, Mail, MapPin, Shield, Phone, Globe } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Footer() {
   return (
@@ -14,10 +15,13 @@ export default function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                <FileText className="h-5 w-5 text-white" />
-              </div>
-              <span className="text-xl font-bold text-white">DocuCraft</span>
+              <Image
+                src="/logo.jpg" 
+                alt="Logo"
+                width={100}
+                height={100}
+                className="rounded-full"
+                />
               <Badge variant="secondary" className="text-xs bg-blue-100 text-blue-600">Pro</Badge>
             </div>
             <p className="text-sm text-slate-400">
@@ -45,11 +49,6 @@ export default function Footer() {
                   Proformas personnalisés
                 </Link>
               </li>
-              <li>
-                <Link href="/auth" className="hover:text-white transition-colors">
-                  Connexion utilisateur
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -63,11 +62,11 @@ export default function Footer() {
               </li>
               <li className="flex items-center space-x-2">
                 <Phone className="h-4 w-4" />
-                <span>+241 XX XX XX XX</span>
+                <span>+241 076 51 69 47</span>
               </li>
               <li className="flex items-center space-x-2">
                 <Mail className="h-4 w-4" />
-                <span>contact@docucraft.ga</span>
+                <span>amakita124@gmail.com</span>
               </li>
               <li className="flex items-center space-x-2">
                 <Globe className="h-4 w-4" />
@@ -82,7 +81,7 @@ export default function Footer() {
             <p className="text-sm text-slate-400 mb-4">
               Accès réservé aux administrateurs pour la gestion des documents et utilisateurs.
             </p>
-            <Link href="/admin">
+            <Link href="/auth">
               <Button 
                 variant="outline" 
                 className="w-full bg-transparent border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white"
@@ -102,7 +101,7 @@ export default function Footer() {
           </div>
           
           <div className="flex items-center space-x-4">
-            <span>Fait avec en parténariat avec l'école 241</span>
+            <span>Fait en collaboration avec l'école 241</span>
             <Badge variant="outline" className="border-slate-600 text-slate-400">
               PRO
             </Badge>

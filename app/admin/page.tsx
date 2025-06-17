@@ -9,121 +9,61 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { 
-  LogOut, 
-  FileText, 
-  Users, 
-  Calendar, 
+import {
+  LogOut,
+  FileText,
+  Users,
+  Calendar,
   Banknote,
-  Search,
-  Filter,
   Plus,
   Trash2,
-  Eye
+  BarChart2,
+  Shield,
+  Layers,
 } from 'lucide-react';
 import { formatCFA } from '@/lib/currency';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
+import StatsPieChart from '@/components/create/StatsPieChart';
 
-// Component pour l'authentification admin
-function AdminAuth() {
-  const { login } = useAuthStore();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Admin login attempt');
-    setIsLoading(true);
-    
-    const success = await login(email, password);
-    
-    if (success) {
-      toast.success('Connexion réussie');
-    } else {
-      toast.error('Identifiants incorrects');
-    }
-    
-    setIsLoading(false);
-  };
-
+function Sidebar({ onLogout, onSelect, selected }: { onLogout: () => void, onSelect: (v: 'dashboard' | 'admins' | 'proformas') => void, selected: 'dashboard' | 'admins' | 'proformas' }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center">
-      <Card className="w-full max-w-md shadow-xl bg-white/90 backdrop-blur-sm">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold text-slate-900 mb-2">
-            Administration
-          </CardTitle>
-          <p className="text-slate-600">Connectez-vous pour accéder au panneau d'administration</p>
-        </CardHeader>
-        
-        <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <Input
-                type="email"
-                placeholder="Email administrateur"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            
-            <div>
-              <Input
-                type="password"
-                placeholder="Mot de passe"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            
-            <Button 
-              type="submit" 
-              className="w-full" 
-              disabled={isLoading}
-            >
-              {isLoading ? 'Connexion...' : 'Se connecter'}
-            </Button>
-            
-            <div className="text-xs text-slate-500 text-center">
-              Admin par défaut: admin@docucraft.com / admin123
-            </div>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+    <aside className="h-screen w-64 bg-white border-r border-slate-200 flex flex-col fixed z-20">
+      <div className="flex items-center gap-2 px-6 py-6 border-b border-slate-100">
+        <BarChart2 className="h-7 w-7 text-blue-600" />
+        <span className="font-bold text-xl text-slate-900">DocuCraft Admin</span>
+      </div>
+      <nav className="flex-1 flex flex-col gap-1 px-2 py-4">
+        <button
+          className={`flex items-center gap-3 px-4 py-2 rounded-lg text-left hover:bg-blue-50 transition ${selected === 'dashboard' ? 'bg-blue-100 font-semibold' : ''}`}
+          onClick={() => onSelect('dashboard')}
+        >
+          <BarChart2 className="h-5 w-5" /> Vue d’ensemble
+        </button>
+        <button
+          className={`flex items-center gap-3 px-4 py-2 rounded-lg text-left hover:bg-blue-50 transition ${selected === 'admins' ? 'bg-blue-100 font-semibold' : ''}`}
+          onClick={() => onSelect('admins')}
+        >
+          <Shield className="h-5 w-5" /> Gestion admins
+        </button>
+        <button
+          className={`flex items-center gap-3 px-4 py-2 rounded-lg text-left hover:bg-blue-50 transition ${selected === 'proformas' ? 'bg-blue-100 font-semibold' : ''}`}
+          onClick={() => onSelect('proformas')}
+        >
+          <Layers className="h-5 w-5" /> Proformas visiteurs
+        </button>
+      </nav>
+      <div className="p-4 border-t border-slate-100">
+        <Button variant="outline" className="w-full flex items-center gap-2" onClick={onLogout}>
+          <LogOut className="h-4 w-4" /> Déconnexion
+        </Button>
+      </div>
+    </aside>
   );
 }
 
-// Component principal du dashboard admin
-function AdminDashboard() {
-  const { user, logout, admins, addAdmin, removeAdmin } = useAuthStore();
+function DashboardContent() {
   const { documents } = useDocumentStore();
-  const router = useRouter();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState<string>('all');
-  const [newAdminEmail, setNewAdminEmail] = useState('');
-  const [showAddAdmin, setShowAddAdmin] = useState(false);
-
-  const handleLogout = () => {
-    console.log('Admin logout');
-    logout();
-    router.push('/');
-  };
-
-  const filteredDocuments = documents.filter(doc => {
-    const matchesSearch = doc.clientInfo.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         doc.clientInfo.lastName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         doc.documentNumber.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesFilter = filterType === 'all' || doc.type === filterType;
-    
-    return matchesSearch && matchesFilter;
-  });
-
   const stats = {
     totalDocuments: documents.length,
     totalAmount: documents.reduce((sum, doc) => sum + doc.total, 0),
@@ -135,9 +75,50 @@ function AdminDashboard() {
     }
   };
 
+  return (
+    <>
+      <div className="grid md:grid-cols-4 gap-6 mb-8">
+        <Card><CardContent className="p-6 flex items-center justify-between">
+          <div>
+            <p className="text-sm text-slate-600">Documents totaux</p>
+            <p className="text-2xl font-bold text-slate-900">{stats.totalDocuments}</p>
+          </div>
+          <FileText className="h-8 w-8 text-blue-600" />
+        </CardContent></Card>
+        <Card><CardContent className="p-6 flex items-center justify-between">
+          <div>
+            <p className="text-sm text-slate-600">Montant total</p>
+            <p className="text-2xl font-bold text-slate-900">{formatCFA(stats.totalAmount)}</p>
+          </div>
+          <Banknote className="h-8 w-8 text-green-600" />
+        </CardContent></Card>
+        <Card><CardContent className="p-6 flex items-center justify-between">
+          <div>
+            <p className="text-sm text-slate-600">Factures</p>
+            <p className="text-2xl font-bold text-slate-900">{stats.documentTypes.facture}</p>
+          </div>
+          <Badge variant="secondary" className="bg-green-100 text-green-800">Factures</Badge>
+        </CardContent></Card>
+        <Card><CardContent className="p-6 flex items-center justify-between">
+          <div>
+            <p className="text-sm text-slate-600">Devis</p>
+            <p className="text-2xl font-bold text-slate-900">{stats.documentTypes.devis}</p>
+          </div>
+          <Badge variant="secondary" className="bg-blue-100 text-blue-800">Devis</Badge>
+        </CardContent></Card>
+      </div>
+      <StatsPieChart stats={stats.documentTypes} />
+    </>
+  );
+}
+
+function AdminsContent() {
+  const { admins, addAdmin, removeAdmin } = useAuthStore();
+  const [newAdminEmail, setNewAdminEmail] = useState('');
+  const [showAddAdmin, setShowAddAdmin] = useState(false);
+
   const handleAddAdmin = () => {
     if (!newAdminEmail) return;
-    
     const success = addAdmin(newAdminEmail, 'admin123');
     if (success) {
       toast.success('Administrateur ajouté avec succès');
@@ -150,292 +131,133 @@ function AdminDashboard() {
 
   const handleRemoveAdmin = (adminId: string) => {
     const success = removeAdmin(adminId);
-    if (success) {
-      toast.success('Administrateur supprimé');
-    } else {
-      toast.error('Impossible de supprimer cet administrateur');
-    }
+    if (success) toast.success('Administrateur supprimé');
+    else toast.error('Impossible de supprimer cet administrateur');
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="bg-white border-b border-slate-200 px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900">Administration DocuCraft</h1>
-            <p className="text-slate-600">Bienvenue, {user?.email}</p>
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Users className="h-5 w-5" />
+          Gestion des administrateurs
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {showAddAdmin ? (
+          <div className="space-y-3">
+            <Input placeholder="Email du nouvel admin" value={newAdminEmail} onChange={e => setNewAdminEmail(e.target.value)} />
+            <div className="flex gap-2">
+              <Button onClick={handleAddAdmin} size="sm" className="flex-1">Ajouter</Button>
+              <Button variant="outline" onClick={() => setShowAddAdmin(false)} size="sm">Annuler</Button>
+            </div>
           </div>
-          
-          <div className="flex items-center gap-4">
-            <Button
-              variant="outline"
-              onClick={() => router.push('/')}
-            >
-              Retour au site
-            </Button>
-            
-            <Button
-              variant="outline"
-              onClick={handleLogout}
-              className="flex items-center gap-2"
-            >
-              <LogOut className="h-4 w-4" />
-              Déconnexion
-            </Button>
-          </div>
+        ) : (
+          <Button onClick={() => setShowAddAdmin(true)} className="w-full flex items-center gap-2">
+            <Plus className="h-4 w-4" /> Ajouter un administrateur
+          </Button>
+        )}
+        <Separator />
+        <div className="space-y-2">
+          <h4 className="font-semibold text-slate-900">Administrateurs actifs</h4>
+          {admins.map((admin) => (
+            <div key={admin.id} className="flex items-center justify-between p-2 bg-slate-50 rounded">
+              <span className="text-sm">{admin.email}</span>
+              {admin.id !== 'admin-1' && (
+                <Button variant="outline" size="sm" onClick={() => handleRemoveAdmin(admin.id)} className="text-red-600 hover:text-red-800">
+                  <Trash2 className="h-3 w-3" />
+                </Button>
+              )}
+            </div>
+          ))}
         </div>
-      </div>
+      </CardContent>
+    </Card>
+  );
+}
 
-      <div className="container mx-auto px-6 py-8">
-        {/* Statistics Cards */}
-        <div className="grid md:grid-cols-4 gap-6 mb-8">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-slate-600">Documents totaux</p>
-                    <p className="text-2xl font-bold text-slate-900">{stats.totalDocuments}</p>
-                  </div>
-                  <FileText className="h-8 w-8 text-blue-600" />
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
+function ProformasContent() {
+  const { documents } = useDocumentStore();
+  const removeDocument = useDocumentStore((state: any) => state.removeDocument);
+  const proformas = documents.filter(doc => doc.type === 'proforma');
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-slate-600">Montant total</p>
-                    <p className="text-2xl font-bold text-slate-900">{formatCFA(stats.totalAmount)}</p>
-                  </div>
-                  <Banknote className="h-8 w-8 text-green-600" />
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
+  const handleDelete = (id: string) => {
+    removeDocument(id);
+    toast.success('Proforma supprimé');
+  };
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-slate-600">Factures</p>
-                    <p className="text-2xl font-bold text-slate-900">{stats.documentTypes.facture}</p>
-                  </div>
-                  <Badge variant="secondary" className="bg-green-100 text-green-800">
-                    Factures
-                  </Badge>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-slate-600">Devis</p>
-                    <p className="text-2xl font-bold text-slate-900">{stats.documentTypes.devis}</p>
-                  </div>
-                  <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-                    Devis
-                  </Badge>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
-
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Documents List */}
-          <div className="lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center gap-2">
-                    <FileText className="h-5 w-5" />
-                    Documents générés
-                  </CardTitle>
-                  
-                  <div className="flex items-center gap-2">
-                    <div className="relative">
-                      <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
-                      <Input
-                        placeholder="Rechercher..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-10 w-48"
-                      />
-                    </div>
-                    
-                    <select
-                      value={filterType}
-                      onChange={(e) => setFilterType(e.target.value)}
-                      className="px-3 py-2 border border-slate-300 rounded-md text-sm"
-                    >
-                      <option value="all">Tous types</option>
-                      <option value="facture">Factures</option>
-                      <option value="devis">Devis</option>
-                      <option value="proforma">Proformas</option>
-                      <option value="autre">Autres</option>
-                    </select>
-                  </div>
-                </div>
-              </CardHeader>
-              
-              <CardContent>
-                {filteredDocuments.length === 0 ? (
-                  <div className="text-center py-8 text-slate-600">
-                    <FileText className="h-12 w-12 mx-auto mb-4 text-slate-400" />
-                    <p>Aucun document trouvé</p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {filteredDocuments.map((doc, index) => (
-                      <motion.div
-                        key={doc.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.05 }}
-                        className="border border-slate-200 rounded-lg p-4 hover:shadow-md transition-all duration-200"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
-                              <Badge 
-                                style={{ backgroundColor: doc.themeColor }}
-                                className="text-white"
-                              >
-                                {doc.type.toUpperCase()}
-                              </Badge>
-                              <span className="font-semibold text-slate-900">
-                                {doc.documentNumber}
-                              </span>
-                            </div>
-                            
-                            <div className="text-sm text-slate-600 space-y-1">
-                              <div className="flex items-center gap-4">
-                                <span>
-                                  <strong>Client:</strong> {doc.clientInfo.firstName} {doc.clientInfo.lastName}
-                                </span>
-                                {doc.clientInfo.companyName && (
-                                  <span>
-                                    <strong>Entreprise:</strong> {doc.clientInfo.companyName}
-                                  </span>
-                                )}
-                              </div>
-                              
-                              <div className="flex items-center gap-4">
-                                <span className="flex items-center gap-1">
-                                  <Calendar className="h-3 w-3" />
-                                  {new Date(doc.createdAt).toLocaleDateString('fr-FR')}
-                                </span>
-                                <span className="flex items-center gap-1">
-                                  <Banknote className="h-3 w-3" />
-                                  {formatCFA(doc.total)}
-                                </span>
-                                <span>
-                                  {doc.products.length} produit(s)
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          <Button variant="outline" size="sm">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Layers className="h-5 w-5" />
+          Proformas visiteurs
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        {proformas.length === 0 ? (
+          <div className="text-center py-8 text-slate-600">
+            <Layers className="h-12 w-12 mx-auto mb-4 text-slate-400" />
+            <p>Aucun proforma visiteur</p>
           </div>
-
-          {/* Admin Management */}
-          <div>
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5" />
-                  Gestion des administrateurs
-                </CardTitle>
-              </CardHeader>
-              
-              <CardContent className="space-y-4">
-                {showAddAdmin ? (
-                  <div className="space-y-3">
-                    <Input
-                      placeholder="Email du nouvel admin"
-                      value={newAdminEmail}
-                      onChange={(e) => setNewAdminEmail(e.target.value)}
-                    />
-                    <div className="flex gap-2">
-                      <Button onClick={handleAddAdmin} size="sm" className="flex-1">
-                        Ajouter
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        onClick={() => setShowAddAdmin(false)}
-                        size="sm"
-                      >
-                        Annuler
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <Button
-                    onClick={() => setShowAddAdmin(true)}
-                    className="w-full flex items-center gap-2"
-                  >
-                    <Plus className="h-4 w-4" />
-                    Ajouter un administrateur
-                  </Button>
-                )}
-                
-                <Separator />
-                
-                <div className="space-y-2">
-                  <h4 className="font-semibold text-slate-900">Administrateurs actifs</h4>
-                  {admins.map((admin) => (
-                    <div key={admin.id} className="flex items-center justify-between p-2 bg-slate-50 rounded">
-                      <span className="text-sm">{admin.email}</span>
-                      {admin.id !== 'admin-1' && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleRemoveAdmin(admin.id)}
-                          className="text-red-600 hover:text-red-800"
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </Button>
-                      )}
-                    </div>
-                  ))}
+        ) : (
+          <div className="space-y-4">
+            {proformas.map((doc) => (
+              <div key={doc.id} className="flex items-center justify-between border border-slate-200 rounded-lg p-4">
+                <div>
+                  <div className="font-semibold">{doc.documentNumber}</div>
+                  <div className="text-sm text-slate-600">{doc.clientInfo.firstName} {doc.clientInfo.lastName}</div>
                 </div>
-              </CardContent>
-            </Card>
+                <Button variant="outline" size="sm" onClick={() => handleDelete(doc.id)} className="text-red-600 hover:text-red-800">
+                  <Trash2 className="h-4 w-4" /> Supprimer
+                </Button>
+              </div>
+            ))}
           </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+function AdminDashboard() {
+  const { user, logout } = useAuthStore();
+  const router = useRouter();
+  const [selected, setSelected] = useState<'dashboard' | 'admins' | 'proformas'>('dashboard');
+
+  const handleLogout = () => {
+    logout();
+    router.push('/');
+  };
+
+  return (
+    <div className="flex min-h-screen bg-slate-50">
+      <Sidebar onLogout={handleLogout} onSelect={setSelected} selected={selected} />
+      <main className="flex-1 ml-64 p-8">
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-slate-900">Bienvenue, {user?.email}</h1>
         </div>
-      </div>
+        {selected === 'dashboard' && <DashboardContent />}
+        {selected === 'admins' && <AdminsContent />}
+        {selected === 'proformas' && <ProformasContent />}
+      </main>
     </div>
   );
 }
 
 export default function AdminPage() {
-  const { user, isAuthenticated, isAdmin } = useAuthStore();
+  const { isAuthenticated, isAdmin } = useAuthStore();
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    console.log('Admin page - checking authentication');
     setIsLoading(false);
-  }, []);
+    // Redirige vers la page de connexion si non authentifié ou non admin
+    if (!isLoading && (!isAuthenticated || !isAdmin())) {
+      router.replace('/admin/login');
+    }
+    // eslint-disable-next-line
+  }, [isLoading, isAuthenticated, isAdmin]);
 
   if (isLoading) {
     return (
@@ -448,8 +270,9 @@ export default function AdminPage() {
     );
   }
 
+  // Si non authentifié, on ne retourne rien (la redirection s'effectue)
   if (!isAuthenticated || !isAdmin()) {
-    return <AdminAuth />;
+    return null;
   }
 
   return <AdminDashboard />;

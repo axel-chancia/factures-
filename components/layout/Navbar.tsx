@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { FileText, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -16,15 +17,21 @@ export default function Navbar() {
   return (
     <nav className="bg-white/90 backdrop-blur-sm border-b border-slate-200 sticky top-0 z-50">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-              <FileText className="h-5 w-5 text-white" />
-            </div>
-            <span className="text-xl font-extrabold text-slate-900 tracking-tight">Factures+</span>
-            <Badge variant="secondary" className="text-xs bg-blue-100 text-blue-600">Pro</Badge>
-          </Link>
+                
+           <Link href="/" className="flex items-center p-3 space-x-2">
+            <Image
+             src="/logo.jpg" 
+             alt="Logo"
+             width={100}
+             height={100}
+             className="rounded-full"
+             />
+             <span className="text-xl font-extrabold text-slate-900 tracking-tight">Factures+</span>
+             <Badge variant="secondary" className="text-xs bg-blue-100 text-blue-600">Pro</Badge>
+            </Link>
+
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">

@@ -92,7 +92,7 @@ export default function ProductCreationForm() {
       <div className="grid gap-4">
         {/* Champs du formulaire pour un nouveau produit */}
         <div>
-          <Label htmlFor="product-name">Nom du Produit/Service</Label>
+          <Label htmlFor="product-name">Nom du Produit</Label>
           <Input id="product-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ex: Ciment, Consultation" />
         </div>
         <div>
