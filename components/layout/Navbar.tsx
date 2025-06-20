@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { FileText, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
@@ -29,7 +28,6 @@ export default function Navbar() {
              className="rounded-full"
              />
              <span className="text-xl font-extrabold text-slate-900 tracking-tight">Factures+</span>
-             <Badge variant="secondary" className="text-xs bg-blue-100 text-blue-600">Pro</Badge>
             </Link>
 
 

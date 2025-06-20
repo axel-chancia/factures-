@@ -1,7 +1,5 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Toaster } from "@/components/ui/sonner";
-
 
 export const metadata: Metadata = {
   title: "Factures+ - Générateur de documents commerciaux",
@@ -17,7 +15,6 @@ export default function RootLayout({
     <html lang="fr">
         <body>
           {children}
-          <Toaster position="top-right" richColors />
         </body>
     </html>
   );

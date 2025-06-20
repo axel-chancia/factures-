@@ -39,7 +39,7 @@ function Sidebar({ onLogout, onSelect, selected }: { onLogout: () => void, onSel
           <BarChart2 className="h-5 w-5 text-white" />
         </div>
         <div>
-          <span className="font-bold text-lg text-white">DocuCraft</span>
+          <span className="font-bold text-lg text-white">Facture+</span>
           <p className="text-xs text-brand-300">Administration</p>
         </div>
       </div>

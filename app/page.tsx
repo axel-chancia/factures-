@@ -2,7 +2,6 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import {
   FileText,
   Zap,
@@ -72,9 +71,6 @@ export default function Home() {
           transition={{ duration: 0.6 }}
           className="text-center max-w-4xl mx-auto mb-16"
         >
-          <Badge className="mb-4 text-primary-700 bg-primary-100 text-sm px-3 py-1 rounded-full border border-primary-200">
-            ✨ Nouveau - DocuCraft Pro
-          </Badge>
 
           <h1 className="text-5xl lg:text-6xl font-extrabold text-brand-900 leading-tight mb-6">
             Créez vos{' '}

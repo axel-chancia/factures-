@@ -1,89 +1,108 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { FileText, Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { Separator } from '@/components/ui/separator';
+import { FileText, Mail, MapPin, Shield, Phone, Globe } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-export default function Navbar() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
+export default function Footer() {
   return (
-    <nav className="bg-white/90 backdrop-blur-sm border-b border-slate-200 sticky top-0 z-50">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-20">
-          {/* Logo */}
-                
-           <Link href="/" className="flex items-center p-3 space-x-2">
-            <Image
-             src="/logo.jpg" 
-             alt="Logo"
-             width={100}
-             height={100}
-             className="rounded-full"
-             />
-             <span className="text-xl font-extrabold text-slate-900 tracking-tight">Factures+</span>
-             <Badge variant="secondary" className="text-xs bg-blue-100 text-blue-600">Pro</Badge>
-            </Link>
-
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link
-              href="/"
-              className="relative text-slate-600 hover:text-blue-600 transition-colors after:content-[''] after:absolute after:w-0 after:h-[2px] after:bg-blue-600 after:bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300"
-            >
-              Accueil
-            </Link>
-            <Link
-              href="/create"
-              className="relative text-slate-600 hover:text-blue-600 transition-colors after:content-[''] after:absolute after:w-0 after:h-[2px] after:bg-blue-600 after:bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300"
-            >
-              Créer un document
-            </Link>
+    <footer className="bg-slate-900 text-slate-300">
+      <div className="container mx-auto px-4 py-12">
+        <div className="grid md:grid-cols-4 gap-8">
+          {/* Brand */}
+          <div className="space-y-4">
+            <div className="flex items-center space-x-2">
+              <Image
+                src="/logo.jpg" 
+                alt="Logo"
+                width={100}
+                height={80}
+                className="rounded-full"
+                />
+            </div>
+            <p className="text-sm text-slate-400">
+              Solution moderne pour la génération de documents commerciaux au Gabon. 
+              Créez facilement vos factures, devis et proformas.
+            </p>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleMobileMenu}
-              className="p-2"
-            >
-              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </Button>
+          {/* Services */}
+          <div className="space-y-4">
+            <h3 className="font-semibold text-white">Services</h3>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link href="/create" className="hover:text-white transition-colors">
+                  Génération de factures
+                </Link>
+              </li>
+              <li>
+                <Link href="/create" className="hover:text-white transition-colors">
+                  Création de devis
+                </Link>
+              </li>
+              <li>
+                <Link href="/create" className="hover:text-white transition-colors">
+                  Proformas personnalisés
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Contact */}
+          <div className="space-y-4">
+            <h3 className="font-semibold text-white">Contact</h3>
+            <ul className="space-y-2 text-sm">
+              <li className="flex items-center space-x-2">
+                <MapPin className="h-4 w-4" />
+                <span>Libreville, Gabon</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <Phone className="h-4 w-4" />
+                <span>+241 076 51 69 47</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <Mail className="h-4 w-4" />
+                <span>amakita124@gmail.com</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <Globe className="h-4 w-4" />
+                <span>Gabon, Afrique Centrale</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Administration */}
+          <div className="space-y-4">
+            <h3 className="font-semibold text-white">Administration</h3>
+            <p className="text-sm text-slate-400 mb-4">
+              Accès réservé aux administrateurs pour la gestion des documents et utilisateurs.
+            </p>
+            <Link href="/auth">
+              <Button 
+                variant="outline" 
+                className="w-full bg-transparent border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white"
+              >
+                <Shield className="h-4 w-4 mr-2" />
+                Espace Admin
+              </Button>
+            </Link>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-slate-200 py-4">
-            <div className="flex flex-col space-y-2">
-              <Link
-                href="/"
-                className="px-4 py-2 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Accueil
-              </Link>
-              <Link
-                href="/create"
-                className="px-4 py-2 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Créer un document
-              </Link>
-            </div>
+        <Separator className="my-8 bg-slate-700" />
+
+        <div className="flex flex-col md:flex-row items-center justify-between text-sm text-slate-400">
+          <div className="flex items-center space-x-4 mb-4 md:mb-0">
+            <span>© 2024 Facture+. Tous droits réservés.</span>
           </div>
-        )}
+          
+          <div className="flex items-center space-x-4">
+            <span>Fait en collaboration avec l'école 241</span>
+          </div>
+        </div>
       </div>
-    </nav>
+    </footer>
   );
 }
