@@ -18,18 +18,18 @@ export default function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-                
-           <Link href="/" className="flex items-center p-3 space-x-2">
+          <Link href="/" className="flex items-center p-3 space-x-2">
             <Image
-             src="/logo.jpg" 
-             alt="Logo"
-             width={100}
-             height={100}
-             className="rounded-full"
-             />
-             <span className="text-xl font-extrabold text-slate-900 tracking-tight">Factures+</span>
-            </Link>
-
+              src="/logo.jpg"
+              alt="Logo"
+              width={100}
+              height={100}
+              className="rounded-full"
+            />
+            <span className="text-xl font-extrabold text-slate-900 tracking-tight">
+              Factures+
+            </span>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
@@ -44,6 +44,12 @@ export default function Navbar() {
               className="relative text-slate-600 hover:text-blue-600 transition-colors after:content-[''] after:absolute after:w-0 after:h-[2px] after:bg-blue-600 after:bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300"
             >
               Créer un document
+            </Link>
+            <Link
+              href="/about"
+              className="relative text-slate-600 hover:text-blue-600 transition-colors after:content-[''] after:absolute after:w-0 after:h-[2px] after:bg-blue-600 after:bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300"
+            >
+              À propos / Contact
             </Link>
           </div>
 
@@ -77,6 +83,13 @@ export default function Navbar() {
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Créer un document
+              </Link>
+              <Link
+                href="/about-contact"
+                className="px-4 py-2 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                À propos / Contact
               </Link>
             </div>
           </div>
