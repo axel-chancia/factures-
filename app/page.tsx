@@ -71,8 +71,7 @@ export default function Home() {
           transition={{ duration: 0.6 }}
           className="text-center max-w-4xl mx-auto mb-16"
         >
-
-          <h1 className="text-5xl lg:text-6xl font-extrabold text-brand-900 leading-tight mb-6">
+          <h1 className="text-balance text-5xl lg:text-6xl font-extrabold text-brand-900 leading-snug tracking-tight mb-6">
             Créez vos{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-accent-600">
               documents commerciaux
@@ -80,7 +79,7 @@ export default function Home() {
             en quelques clics
           </h1>
 
-          <p className="text-xl text-brand-600 mb-10 max-w-2xl mx-auto">
+          <p className="text-balance text-lg sm:text-xl text-brand-700 leading-relaxed tracking-normal mb-10 max-w-2xl mx-auto">
             Générez facilement des factures, devis et proformas professionnels.
             Interface moderne, personnalisation complète, export PDF instantané.
           </p>
@@ -120,8 +119,12 @@ export default function Home() {
                   <div className="w-12 h-12 bg-gradient-to-br from-primary-100 to-primary-200 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                     <feature.icon className="h-6 w-6 text-primary-600" />
                   </div>
-                  <h3 className="font-semibold text-brand-900 mb-2">{feature.title}</h3>
-                  <p className="text-brand-600 text-sm">{feature.description}</p>
+                  <h3 className="font-semibold text-brand-900 text-base lg:text-lg mb-2 tracking-tight leading-tight">
+                    {feature.title}
+                  </h3>
+                  <p className="text-brand-600 text-sm leading-relaxed">
+                    {feature.description}
+                  </p>
                 </CardContent>
               </Card>
             </motion.div>
@@ -137,15 +140,18 @@ export default function Home() {
         >
           <Card className="bg-white/95 border-0 shadow-strong backdrop-blur-md">
             <CardContent className="p-10">
-              <h2 className="text-3xl font-bold text-brand-900 mb-8 text-center">
-                Pourquoi choisir <span className="text-primary-600">DocuCraft Pro</span> ?
+              <h2 className="text-balance text-3xl font-bold text-brand-900 mb-8 text-center leading-snug tracking-tight">
+                Pourquoi choisir{' '}
+                <span className="text-primary-600">DocuCraft Pro</span> ?
               </h2>
 
               <div className="grid md:grid-cols-2 gap-5">
                 {benefits.map((benefit, index) => (
                   <div key={index} className="flex items-center gap-3">
                     <CheckCircle className="h-5 w-5 text-success-500" />
-                    <span className="text-brand-700">{benefit}</span>
+                    <span className="text-brand-700 text-sm sm:text-base leading-snug tracking-normal">
+                      {benefit}
+                    </span>
                   </div>
                 ))}
               </div>
