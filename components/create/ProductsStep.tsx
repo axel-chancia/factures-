@@ -253,7 +253,7 @@ export default function ProductsStep() {
                       <div className="space-y-2">
                         <Label className="text-primary-700 font-medium flex items-center gap-2">
                           <Calculator className="h-4 w-4" />
-                          Prix par kilo (CFA) <span className="text-danger-500">*</span>
+                          Prix par article (CFA) <span className="text-danger-500">*</span>
                         </Label>
                         <Input
                           type="number"
@@ -267,7 +267,7 @@ export default function ProductsStep() {
                       <div className="space-y-2">
                         <Label className="text-primary-700 font-medium flex items-center gap-2">
                           <Weight className="h-4 w-4" />
-                          Quantité (Kilos) <span className="text-danger-500">*</span>
+                          Quantité (Nombre) <span className="text-danger-500">*</span>
                         </Label>
                         <Input
                           type="number"
