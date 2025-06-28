@@ -67,6 +67,10 @@ export default function About() {
           <Card className="bg-white/95 shadow-strong backdrop-blur-md">
             <CardContent className="p-8">
               <h2 className="text-3xl font-bold text-brand-900 mb-6 text-center">Contactez-nous</h2>
+              {/* Ajout d'une note d'information */}
+              <p className="text-center text-brand-600 text-sm mb-4">
+                Votre message sera envoyé à notre équipe par email et WhatsApp.
+              </p>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label className="block text-brand-700 mb-1">Nom</label>
