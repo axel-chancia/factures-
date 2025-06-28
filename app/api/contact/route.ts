@@ -3,20 +3,20 @@ import nodemailer from 'nodemailer';
 import twilio from 'twilio';
 
 export async function POST(req: NextRequest) {
-    const { name, email, message } = await req.json();
+    const { name, email, message, mode } = await req.json();
 
     // --- ENVOI EMAIL ---
     const transporter = nodemailer.createTransport({
-        service: 'gmail', // ou autre service
+        service: 'gmail',
         auth: {
-            user: process.env.MAIL_USER, // votre email
-            pass: process.env.MAIL_PASS, // mot de passe ou app password
+            user: process.env.MAIL_USER,
+            pass: process.env.MAIL_PASS,
         },
     });
 
     const mailOptions = {
         from: process.env.MAIL_USER,
-        to: process.env.MAIL_TO, // votre email de réception
+        to: process.env.MAIL_TO,
         subject: `Nouveau message de ${name}`,
         text: `Nom: ${name}\nEmail: ${email}\nMessage:\n${message}`,
     };
@@ -30,15 +30,18 @@ export async function POST(req: NextRequest) {
     const whatsappMessage = `Nouveau message via le site:\nNom: ${name}\nEmail: ${email}\nMessage:\n${message}`;
 
     try {
-        // Envoi email
-        await transporter.sendMail(mailOptions);
-
-        // Envoi WhatsApp
-        await twilioClient.messages.create({
-            from: `whatsapp:${process.env.TWILIO_WHATSAPP_FROM}`, // ex: whatsapp:+14155238886
-            to: `whatsapp:${process.env.WHATSAPP_TO}`, // votre numéro WhatsApp
-            body: whatsappMessage,
-        });
+        if (mode === 'mail') {
+            await transporter.sendMail(mailOptions);
+        } else if (mode === 'whatsapp') {
+            await twilioClient.messages.create({
+                from: `whatsapp:${process.env.TWILIO_WHATSAPP_FROM}`,
+                to: `whatsapp:${process.env.WHATSAPP_TO}`,
+                body: whatsappMessage,
+            });
+        } else {
+            // Si mode inconnu, on peut retourner une erreur
+            return NextResponse.json({ success: false, error: "Mode d'envoi inconnu." }, { status: 400 });
+        }
 
         return NextResponse.json({ success: true });
     } catch (error: unknown) {

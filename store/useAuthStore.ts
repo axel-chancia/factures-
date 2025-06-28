@@ -21,7 +21,7 @@ interface AuthStore {
 
 const DEFAULT_ADMIN = {
   id: 'admin-1',
-  email: 'admin@docucraft.com',
+  email: 'amakita124@gmail.com',
   role: 'admin' as const
 };
 
@@ -39,7 +39,7 @@ export const useAuthStore = create<AuthStore>()(
         const { admins } = get();
         const isAdminUser = admins.some(admin => admin.email === email);
         
-        if (isAdminUser && password === 'admin123') {
+        if (isAdminUser && password === '@rsel2024') {
           const adminUser = admins.find(admin => admin.email === email)!;
           set({
             user: adminUser,
