@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -94,7 +93,7 @@ export default function ProductsStep() {
       description,
       pricingMode,
       ...(pricingMode === 'unitaire' 
-        ? { unitPrice, kilos: quantity }
+        ? { unitPrice: quantity }
         : { 
             pricePerPackage: packagePrice,
             ...(packageType === 'carton' ? { cartons: packageQuantity, sacs: 0 } : { sacs: packageQuantity, cartons: 0 })
@@ -211,7 +210,7 @@ export default function ProductsStep() {
                           <h3 className={`font-semibold ${pricingMode === 'unitaire' ? 'text-primary-700' : 'text-brand-700'}`}>
                             Prix unitaire
                           </h3>
-                          <p className="text-sm text-brand-600">Prix par kilo × quantité</p>
+                          <p className="text-sm text-brand-600">Prix unitaire × quantité</p>
                         </CardContent>
                       </Card>
                     </motion.div>
@@ -253,7 +252,7 @@ export default function ProductsStep() {
                       <div className="space-y-2">
                         <Label className="text-primary-700 font-medium flex items-center gap-2">
                           <Calculator className="h-4 w-4" />
-                          Prix par article (CFA) <span className="text-danger-500">*</span>
+                          Prix par article ou produit (CFA) <span className="text-danger-500">*</span>
                         </Label>
                         <Input
                           type="number"
